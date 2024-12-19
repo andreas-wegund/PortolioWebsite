@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{#{% load cloudinary %}#}
+
+
+{% block title %}Contact{% endblock title %}
+
+{% comment %}
+<!-- HERO-SECTION -->
+{% include 'includes/hero.html' %}
+{% endcomment %}
+
+<!-- BLOCK CONTENT -->
+{% block content %}
+
+    <main class="container">
+        <h1 class="text-center text-amber-600 font-extrabold text-5xl m-24 p-12 bg-slate-300 rounded-xl">
+            Contact-View:
+
+            {% for userprofile in userprofiles %}
+                Hier kommt der Username {{ userprofile.user.last_name }}
+                {{ userprofile.user.first_name }}
+            {% endfor %}
+        </h1>
+
+    </main>
+
+{% endblock content %}

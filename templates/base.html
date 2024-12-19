@@ -1,44 +1,44 @@
 {% load static %}
-{#{% load cloudinary %}#}
 
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta charset="UTF-8">
-        <title>{% block title %}{% endblock title %}</title>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock title %}</title>
 
 
-        <!-- DESCRIPTION & KEYWORDS -->
-        <meta name="description" content="Knowledge sharing platform">
-        <meta name="keywords" content="Knowledge, Sharing, Eurostat, insights, strategic, excellence">
-        <meta name="author" content="Andreas S. Wegund">
-        <!-- OPEN GRAPH FOR SOCIAL MEDIA -->
-        <meta property="og:url" content="http://{{ request.META.HTTP_HOST }}{{ request.path }}">
-        <meta property="og:type" content="website">
-        <meta property="og:title" content="{% block og_title %}DataDrivenStrateis{% endblock og_title %}">
-        <!-- extend templ. & fill -->
-        <meta property="og:description"
-              content="{% block og_description %}Knowledge sharing platform{% endblock og_description %}">
-        <!-- 1200px x 630px for Facebook -->
-        <meta property="og:image"
-              content="{% block og_image %}http://{{ request.META.HTTP_HOST }}{% static 'images/1200_630.jpg' %}{% endblock og_image %}">
-        <!-- 600px x 600px for Twitter (X) -->
-        <meta property="twitter:image"
-              content="{% block og_image_twitter %}http://{{ request.META.HTTP_HOST }}{% static 'images/600_600.jpg' %}{% endblock og_image_twitter %}">
+    <!-- DESCRIPTION & KEYWORDS -->
+    <meta name="description" content="Knowledge sharing platform">
+    <meta name="keywords" content="Knowledge, Sharing, Eurostat, insights, strategic, excellence">
+    <meta name="author" content="Andreas S. Wegund">
+    <!-- OPEN GRAPH FOR SOCIAL MEDIA -->
+    <meta property="og:url" content="http://{{ request.META.HTTP_HOST }}{{ request.path }}">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{% block og_title %}DataDrivenStrateis{% endblock og_title %}">
+    <!-- extend templ. & fill -->
+    <meta property="og:description"
+          content="{% block og_description %}Knowledge sharing platform{% endblock og_description %}">
+    <!-- 1200px x 630px for Facebook -->
+    <meta property="og:image"
+          content="{% block og_image %}http://{{ request.META.HTTP_HOST }}{% static 'images/1200_630.jpg' %}{% endblock og_image %}">
+    <!-- 600px x 600px for Twitter (X) -->
+    <meta property="twitter:image"
+          content="{% block og_image_twitter %}http://{{ request.META.HTTP_HOST }}{% static 'images/600_600.jpg' %}{% endblock og_image_twitter %}">
 
-        <!-- TAILWIND CSS -->
-        <link rel="stylesheet" href="{% if DJANGO_RUN_MODE == "DEVELOPMENT" %}{% static 'css/style.css' %}{% else %}{% static 'css/style.min.css' %}{% endif %}">
-    </head>
+    <!-- TAILWIND CSS -->
+    <link rel="stylesheet" href="
+            {% if DJANGO_RUN_MODE == "DEVELOPMENT" %}{% static 'css/style.css' %}{% else %}{% static 'css/style.min.css' %}{% endif %}">
+</head>
     <body>
 
-
         <!-- NAVIGATION -->
+        {% include 'includes/navbar.html' %}
 
-
-
+        <!-- HERO SECTION -->
+        {% include 'includes/hero.html' %}
 
         <!-- CONTENT -->
         {% block content %}
@@ -47,10 +47,8 @@
         {% endblock content %}
 
 
-
         <!-- FOOTER -->
-        {% block footer %}
-        {% endblock footer %}
+        {% include 'includes/footer.html' %}
 
     </body>
 </html>

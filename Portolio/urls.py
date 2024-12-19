@@ -14,25 +14,24 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-
-from django.conf import settings
-from django.conf.urls.static import static
 ### ============================================================================================ #
 ### IMPORTS
 ### ============================================================================================ #
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
 
-from users import views
 from users.sitemaps import StatisticSitemap, CategorySitemap, PostPagesSitemap
+from .models.otp_admin import admin_site
+
 
 
 
 ### ============================================================================================ #
 ### SITEMAPS
 ### ============================================================================================ #
-
 sitemaps = {
       'static':     StatisticSitemap,
       'categories': CategorySitemap,
@@ -44,21 +43,27 @@ sitemaps = {
 ### ============================================================================================ #
 urlpatterns = [
       
-      # # Django creates the XML-file automatically
+      ### ==============================================
+      ### SITEMAPS & ROBOTS.txt (indexed and NOT TO BE indexed by search engine robots)
       # path( 'sitemap.xml', sitemap, { 'sitemaps': sitemaps }, name='django.contrib.sitemaps.view.sitemap' ),
       # robots.txt --> search engines should NOT index these pages
       path( 'robots.txt', TemplateView.as_view( template_name='robots.txt', content_type='text/plain' ) ),
       
-      # path( 'admin/', admin.site.urls ),
-      path( 'admin/', include( 'admin_honeypot.urls', namespace='admin_honeypot' ) ),
-      path( 'aswc_admin/', admin.site.urls ),
+      ### ==============================================
+      # OTP_PWD ADMIN Console
+      path( 'admin/', include( 'admin_honeypot.urls', namespace='admin_honeypot' ) ),  # => FAKE Honeypot
+      path( 'django_admin/', admin.site.urls ),  # => admin page for initial setup of superuser!
+      path( 'aswc_admin/', admin_site.urls ),  # => new regular login to access the admin Console
       
-      path( '', views.home, name='home' ),
+      ### ==============================================
+      ### 1. APP: USERS
+      path( '', include( 'users.urls' ) ),
 
 ]
 
 ### ============================================================================================ #
 ### STATICFILES & MEDIAFILES
 ### ============================================================================================ #
-urlpatterns += static( settings.STATIC_URL, document_root=settings.STATIC_ROOT )
-urlpatterns += static( settings.MEDIA_URL, document_root=settings.MEDIA_ROOT )
+if settings.DJANGO_RUN_MODE == 'DEVELOPMENT':
+      urlpatterns += static( settings.STATIC_URL, document_root=settings.STATIC_ROOT )
+      urlpatterns += static( settings.MEDIA_URL, document_root=settings.MEDIA_ROOT )

@@ -1,6 +1,6 @@
 name: 'RUN WEBSITE TESTS:'
 on:
-  push_request:
+  push:
     branches:
       - master
 
@@ -13,11 +13,11 @@ jobs:
       DJANGO_SECRET_KEY: dev_secret_key
 
     steps:
-      # name: Clone Repository into our runner-environment
-      - uses : actions/checkout@v4
+      - name: Clone Repository into our runner-environment
+        uses : actions/checkout@v4
 
-      # name: setup python in this container
-      - uses: actions/setup-python@v5
+      - name: Setup python in this container
+        uses: actions/setup-python@v5
         with:
           python-version : 3.11.3
 
@@ -30,10 +30,18 @@ jobs:
       - name: Copy and Rename Requirements-File
         run: mv requirements.txt requirements_NEICH.txt
 
-#      - run: mv requirements.txt requirements_NEICH.txt
-
       - name: Install Requirements.txt file
         run: pip install -r requirements_NEICH.txt
+
+#      - name: upload requirements_NEICH.txt to our repository
+#        uses: zyrouge/github-push-action@main
+#        with:
+#          directory: '.'
+#          branch: staging
+#          verbose: true
+#          allow-empty-commit: true
+
+
 #      - run: python manage.py test
 
 
