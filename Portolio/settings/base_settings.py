@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 ### ============================================================================================ #
 ###  IMPORTS
 ### ============================================================================================ #
-
 import os
 from pathlib import Path
 
@@ -64,14 +63,46 @@ INSTALLED_APPS = [
       'django.contrib.messages',
       'django.contrib.staticfiles',
       
+      ### --------------------------------------
+      ### CLOUDINARY (after django.contrib.staticfiles)
+      'cloudinary_storage',  # CLOUDINARY STORAGE - https://pypi.org/project/django-cloudinary-storage/
+      'cloudinary',  # CLOUDINARY
+      
+      ### --------------------------------------
+      ### DJANGO EXTENSIONS
       'django.contrib.sitemaps',  # SEO
-      'django_extensions',  # Model Extensions - https://django-extensions.readthedocs.io
+      'django_extensions',  # MODEL EXTENSIONS - https://django-extensions.readthedocs.io
       
-      'admin_honeypot',
+      ### --------------------------------------
+      ### 3-RD PARTY PACKAGES
+      'admin_honeypot',  # ADMIN HONEYPOT
+      'django_otp',  # OTP - One Time Password
+      'django_otp.plugins.otp_totp',  # OTP - One Time Password
+      # 'django_otp.plugins.otp_hotp',  # OTP - One Time Password ==> NOT NEEDED
+      # 'django_otp.plugins.otp_static',  # OTP - One Time Password ==> NOT NEEDED
       
+      ### --------------------------------------
+      ### APPS
       'users.apps.UsersConfig',  # Users APP
       'features.apps.FeaturesConfig',  # Development Features APP
 ]
+
+# ### ============================================================================================ #
+# ### STATIC FILES AND MEDIA FILES & CLOUDINARY STORAGE
+# ### ============================================================================================ #
+# # https://docs.djangoproject.com/en/5.1/howto/static-files/
+# # static
+# # STATIC_URL -> prefix for the urls in the templates where staticfiles are stored in Development
+# STATIC_URL = '/static/'
+# # STATICFILES_DIRS -> in Development django will try to search here for existing staticfiles
+# # Should match the above folders, accordingly
+# STATICFILES_DIRS = [
+#       os.path.join( BASE_DIR, 'static' ),
+#       os.path.join( BASE_DIR, 'media' ),
+# ]
+# # *_ROOT -> this is where the `pyhton manage.py collectstatic` command will store the files for
+# #           Deployment to Production ( so this should be `staticFILES` & `mediaFILES`
+# STATIC_ROOT = os.path.join( BASE_DIR, 'staticfiles' )  # -->
 
 ### ============================================================================================ #
 ### MIDDLEWEARE
@@ -82,12 +113,17 @@ MIDDLEWARE = [
       'django.middleware.common.CommonMiddleware',
       'django.middleware.csrf.CsrfViewMiddleware',
       'django.contrib.auth.middleware.AuthenticationMiddleware',
+      
+      ### ==================
+      ### DJANGO 3RD-PARTY MIDDLEWARE
+      'django_otp.middleware.OTPMiddleware',  # OTP Middleware: must be below auth-Middleware -> https://django-otp-official.readthedocs.io/en/stable/overview.html
+      
       'django.contrib.messages.middleware.MessageMiddleware',
       'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'Portolio.urls'
-AUTH_USER_MODEL = 'users.CustomUser'
+# AUTH_USER_MODEL = 'users.CustomUser'
 
 ### ============================================================================================ #
 ### TEMPLATE SETTINGS
@@ -100,6 +136,8 @@ TEMPLATES = [
                   'templates',
                   'static',
                   'staticfiles',
+                  'media',
+                  'mediafiles',
             ],
             'APP_DIRS': True,
             'OPTIONS':  {

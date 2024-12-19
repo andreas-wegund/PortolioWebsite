@@ -1,21 +1,44 @@
 {% extends 'base.html' %}
 
-
 {% load static %}
 {#{% load cloudinary %}#}
 
 
 {% block title %}Home{% endblock title %}
 
+{% comment %}
+<!-- HERO-SECTION -->
+{% include 'includes/hero.html' %}
+{% endcomment %}
 
+<!-- BLOCK CONTENT -->
 {% block content %}
 
-    <h1 class="text-center text-amber-600 font-extrabold text-5xl m-24 p-12 bg-slate-300 rounded-xl">Welcome to my
-        Portfolio
-        Website, dear Guest!{{ fullname }}</h1>
-    <h3>{% if feature_HeroButton %}<span style="color: green">Herobutton is enabled</span>{% else %}
-        <span style="color:red">Herobutton is DISabled</span>{% endif %}</h3>
+    <main class="container">
+        <h1 class="text-center text-amber-600 font-extrabold text-5xl m-24 p-12 bg-slate-300 rounded-xl">
+            Welcome to my Website, {{ fullname }}
 
-    context Run-Mode: {{ DJANGO_RUN_MODE }}
+
+            {% for userprofile in userprofiles %}
+                Hier kommt der Username {{ userprofile }} mit: {{ userprofile.user.username }} und natürlich
+                {{ userprofile.user.first_name }} {{ userprofile.user.last_name }}
+                {{ userprofile.user.first_name }}
+                BILD: {% if userprofile.profilepic.url %}
+                <img src="{{ userprofile.profilepic.url }}" alt="{{ userprofile.user.image }}">{% else %}<img src="{% static '_default_profilepic.png' %}" alt="default image">{% endif %}
+            {% endfor %}
+            <img src="{% static '_default_profilepic.png' %}" alt="default image">
+        </h1>
+        <br>
+        <h3 class="text-4xl font-extrabold">
+            {% if feature_HeroButton %}
+                <span style="color: green">Herobutton is enabled</span>
+            {% else %}
+                <span style="color:red">Herobutton is DISabled</span>
+            {% endif %}
+        </h3>
+
+        context Run-Mode: {{ DJANGO_RUN_MODE }} with DEBUG== {{ debug }}
+
+    </main>
 
 {% endblock content %}

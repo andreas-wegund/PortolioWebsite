@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{#{% load cloudinary %}#}
+
+
+{% block title %}About{% endblock title %}
+
+{% comment %}
+<!-- HERO-SECTION -->
+{% include 'includes/hero.html' %}
+{% endcomment %}
+
+<!-- BLOCK CONTENT -->
+{% block content %}
+
+    <main class="container">
+        <h1 class="text-center text-amber-600 font-extrabold text-5xl m-24 p-12 bg-slate-300 rounded-xl">
+            This is my very simple about View:
+
+
+            {% for userprofile in userprofiles %}
+                Hier kommt der Username {{ userprofile }} mit: {{ userprofile.user.username }} und natürlich
+                {{ userprofile.user.first_name }} {{ userprofile.user.last_name }}
+                {{ userprofile.user.first_name }}
+            {% endfor %}
+        </h1>
+
+    </main>
+
+{% endblock content %}

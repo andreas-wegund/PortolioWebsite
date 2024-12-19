@@ -1,5 +1,5 @@
 ### ============================================================================================ #
-### DOTENV
+### IMPORTS
 ### ============================================================================================ #
 
 from .base_settings import *
@@ -18,17 +18,7 @@ CSRF_TRUSTED_ORIGINS = os.environ[ 'CSRF_TRUSTED_ORIGINS_' + DJANGO_RUN_MODE ].s
 ### ============================================================================================ #
 ### INTERNAL_IPS
 ### ============================================================================================ #
-INTERNAL_IPS = [
-      '127.0.0.1',
-      'localhost',
-]
-
-### ============================================================================================ #
-### INSTALLED_APPS
-### ============================================================================================ #
-INSTALLED_APPS.append( 'cloudinary_storage' )
-INSTALLED_APPS.append( 'django.contrib.staticfiles' )
-INSTALLED_APPS.append( 'cloudinary' )
+INTERNAL_IPS = os.environ[ 'DJANGO_INTERNAL_IPS_' + DJANGO_RUN_MODE ].split( ' ' )
 
 ### ============================================================================================ #
 ### MIDDLEWARE
@@ -42,20 +32,40 @@ import dj_database_url
 
 
 
-DATABASES[ "prod" ] = dj_database_url.parse( os.environ.get( "DATABASE_URL" + DJANGO_RUN_MODE ) )
+DATABASES[ "default" ] = dj_database_url.parse( os.environ.get( "DATABASE_URL_" + DJANGO_RUN_MODE ) )
 
 ### ============================================================================================ #
 ### STATIC FILES AND MEDIA FILES & CLOUDINARY STORAGE
 ### ============================================================================================ #
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
+# STATIC_URL -> prefix for the urls in the templates where staticfiles are stored in Development
+STATIC_URL = '/static/'
+# STATICFILES_DIRS -> in Development django will try to search here for existing staticfiles
+# Should match the above folders, accordingly
+STATICFILES_DIRS = [
+      os.path.join( BASE_DIR, 'static' ),
+      os.path.join( BASE_DIR, 'media' ),
+]
+# *_ROOT -> this is where the `pyhton manage.py collectstatic` command will store the files for
+#           Deployment to Production ( so this should be `staticFILES` & `mediaFILES`
+STATIC_ROOT = os.path.join( BASE_DIR, 'staticfiles' )  # -->
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 CLOUDINARY_STORAGE = {
       'CLOUD_NAME': os.environ.get( "CLOUDINARY_CLOUD_NAME" ),
       'API_KEY':    os.environ.get( "CLOUDINARY_API_KEY" ),
       'API_SECRET': os.environ.get( "CLOUDINARY_API_SECRET" ),
+}
+MEDIA_URL = '/media/'  # or any prefix you choose
+
+### DEFAULT_FILE_STORAGE is depreciated ==> instead we need to use the below's setup
+# DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+STORAGES = {
+      "default":     {
+            "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+      },
+      "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+      },
 }
 
 ### ============================================================================================ #
